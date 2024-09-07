@@ -3,3 +3,5 @@
 # javascript compiler
 
 /dist
+
+.env
