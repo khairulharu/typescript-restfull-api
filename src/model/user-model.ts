@@ -19,10 +19,10 @@ export type CreateUserRequest = {
      password: string;
 }
 
-// export type CreateUserLoginRequest = {
-//      username: string;
-//      password: string;
-// }
+export type LoginUserRequest = {
+     username: string;
+     password: string;
+}
 
 export function toUserResponse(user: User): UserResponse {
      return {
@@ -30,12 +30,3 @@ export function toUserResponse(user: User): UserResponse {
           username: user.username
      }
 }
-
-// export function toUserParsedData(user: User) : UserParseData {
-//      return {
-//           username : user.name,
-//           password : user.password,
-//           name: user.name,
-//           token: user.token
-//      }
-// }

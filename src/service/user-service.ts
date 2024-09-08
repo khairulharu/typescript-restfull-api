@@ -1,8 +1,9 @@
 import { prismaClient } from "../application/database";
 import { ResponseError } from "../error/response-error";
-import { CreateUserRequest, toUserResponse, UserResponse } from "../model/user-model";
+import { CreateUserRequest, toUserResponse, UserResponse, LoginUserRequest } from "../model/user-model";
 import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
+import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 
 export class UserService {
@@ -29,26 +30,38 @@ export class UserService {
           return toUserResponse(user)
      };
 
-     // static async login(request: CreateUserLoginRequest): Promise<UserResponse> {
-     //      const loginRequest = Validation.validate(UserValidation.LOGIN, request);
+     static async login(request: LoginUserRequest): Promise<UserResponse> {
+          const loginRequest = Validation.validate(UserValidation.LOGIN, request);
 
-     //      const searchUserWithSameUsername = await prismaClient.user.findFirst({
-     //           where: {
-     //                username: loginRequest.username
-     //           }
-     //      });
+          let user = await prismaClient.user.findUnique({
+               where: {
+                    username: loginRequest.username
+               }
+          });
 
-     //      if (searchUserWithSameUsername === null) {
-     //           throw new ResponseError(400, "error username not found");
-     //      }
+          if (!user) {
+               throw new ResponseError(401, "Username or Password is Wrong");
+          }
 
-     //      const userParsed = toUserParsedData(searchUserWithSameUsername);
+          const isPasswordValid = await bcrypt.compare(loginRequest.password, user.password);
 
-     //      const isUserSamePassword = await bcrypt.compare(loginRequest.password, userParsed.password);
+          if (!isPasswordValid) {
+               throw new ResponseError(401, "Username or Password is Wrong")
+          }
 
-     //      if (!isUserSamePassword) {
-     //           throw new ResponseError(404, "wrong password")
-     //      }
-     // };
+          user = await prismaClient.user.update({
+               where: {
+                    username: loginRequest.username
+               },
+               data: {
+                    token: uuid()
+               }
+          });
+
+          const response = toUserResponse(user);
+          response.token = user.token!;
+
+          return response
+     };
 
 }

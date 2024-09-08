@@ -39,3 +39,68 @@ describe('POST /api/users', function () {
           expect(response.body.data.name).toBe("test");
      });
 });
+
+describe('POST /api/users/login', () => {
+
+     beforeEach(async () => {
+          await UserTest.create();
+     });
+
+     afterEach(async () => {
+          await UserTest.delete();
+     });
+
+     it('should get no error and succes login', async () => {
+          const response = await supertest(web)
+          .post("/api/users/login")
+          .send({
+               username: "test",
+               password: "test"
+          });
+
+          logger.debug(response.body);
+          expect(response.status).toBe(200);
+          expect(response.body.data.username).toBe("test");
+          expect(response.body.data.name).toBe("test");
+          expect(response.body.data.token).toBeDefined();
+     });
+
+     it('should get erorr for checker in zod', async () => {
+          const response = await supertest(web)
+          .post("/api/users/login")
+          .send({
+               username: "",
+               password: ""
+          });
+
+          logger.debug(response.body);
+          expect(response.status).toBe(400);
+          expect(response.body.errors).toBeDefined();
+     });
+
+     it('should get erorr beacuse password wrong', async () => {
+          const response = await supertest(web)
+          .post("/api/users/login")
+          .send({
+               username: "test",
+               password: "testing"
+          });
+
+          logger.debug(response.body);
+          expect(response.status).toBe(401);
+          expect(response.body.errors).toBe("Username or Password is Wrong");
+     });
+
+     it('should get erorr because username not found', async () => {
+          const response = await supertest(web)
+          .post("/api/users/login")
+          .send({
+               username: "testing",
+               password: "testing"
+          });
+
+          logger.debug(response.body);
+          expect(response.status).toBe(401);
+          expect(response.body.errors).toBe("Username or Password is Wrong");
+     });
+});
