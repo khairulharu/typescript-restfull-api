@@ -5,6 +5,7 @@ import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
+import { User } from "@prisma/client";
 
 export class UserService {
      
@@ -63,5 +64,9 @@ export class UserService {
 
           return response
      };
+
+     static async get(user: User): Promise<UserResponse> {
+          return toUserResponse(user);
+     }
 
 }
