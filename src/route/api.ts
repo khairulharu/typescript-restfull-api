@@ -8,4 +8,5 @@ apiRouter.use(authMiddleware);
 //endpoint yang menggunakan middleware, dan butuh token
 //this only for request token
 // User API
-apiRouter.get("/api/users/current", UserController.get)
+apiRouter.get("/api/users/current", UserController.get);
+apiRouter.patch("/api/users/current", UserController.update);

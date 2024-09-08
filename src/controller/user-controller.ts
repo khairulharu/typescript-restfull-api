@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserService } from "../service/user-service";
-import { CreateUserRequest, LoginUserRequest } from "../model/user-model";
+import { CreateUserRequest, LoginUserRequest, UpdateUserRequest } from "../model/user-model";
 import { UserRequest } from "../type/user-request";
 
 export class UserController {
@@ -14,7 +14,7 @@ export class UserController {
                     data: response
                })
           } catch (error) {
-               next(error)
+               next(error);
           }
      }
 
@@ -28,7 +28,7 @@ export class UserController {
                     data: response
                })
           } catch (error) {
-               next(error)
+               next(error);
           }
      }
 
@@ -40,7 +40,20 @@ export class UserController {
                     data: response
                })
           } catch (error) {
-               next(error)
+               next(error);
+          }
+     }
+
+     static async update(req: UserRequest, res: Response, next: NextFunction) {
+          try {
+               const request: UpdateUserRequest = req.body as UpdateUserRequest;
+               const response = await UserService.update(req.user!, request);
+
+               res.status(200).json({
+                    data: response
+               })
+          } catch (error) {
+               next(error);
           }
      }
 }
