@@ -172,14 +172,14 @@ describe('PUT /api/contacts/:contactId', function () {
           const contact = await ContactTest.get();
 
           const response = await supertest(web)
-          .put(`/api/contacts/${contact.id}`)
-          .set("X-API-TOKEN", "test")
-          .send({
-               first_name: "updated",
-               last_name: "updated",
-               email: "updated@example.com",
-               phone: "123456789"
-          })
+               .put(`/api/contacts/${contact.id}`)
+               .set("X-API-TOKEN", "test")
+               .send({
+                    first_name: "updated",
+                    last_name: "updated",
+                    email: "updated@example.com",
+                    phone: "123456789"
+               })
 
           logger.debug(response);
 
@@ -195,14 +195,14 @@ describe('PUT /api/contacts/:contactId', function () {
           const contact = await ContactTest.get();
 
           const response = await supertest(web)
-          .put(`/api/contacts/${contact.id + 1}`)
-          .set("X-API-TOKEN", "test")
-          .send({
-               first_name: "updated",
-               last_name: "updated",
-               email: "updated@example.com",
-               phone: "123456789"
-          })
+               .put(`/api/contacts/${contact.id + 1}`)
+               .set("X-API-TOKEN", "test")
+               .send({
+                    first_name: "updated",
+                    last_name: "updated",
+                    email: "updated@example.com",
+                    phone: "123456789"
+               })
 
           logger.debug(response);
 
@@ -225,10 +225,10 @@ describe('DELETE /api/contacts/:contactId', () => {
 
      it('should be able to remove contact', async () => {
           const contact = await ContactTest.get();
-          
+
           const response = await supertest(web)
-          .delete(`/api/contacts/${contact.id}`)
-          .set("X-API-TOKEN", "test")
+               .delete(`/api/contacts/${contact.id}`)
+               .set("X-API-TOKEN", "test")
 
           logger.debug(response);
 
@@ -238,10 +238,10 @@ describe('DELETE /api/contacts/:contactId', () => {
 
      it('should be able to remove contact', async () => {
           const contact = await ContactTest.get();
-          
+
           const response = await supertest(web)
-          .delete(`/api/contacts/${contact.id + 1}`)
-          .set("X-API-TOKEN", "test")
+               .delete(`/api/contacts/${contact.id + 1}`)
+               .set("X-API-TOKEN", "test")
 
           logger.debug(response);
 
